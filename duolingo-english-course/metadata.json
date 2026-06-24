@@ -1,0 +1,6 @@
+{
+  "name": "Duolingo English Course",
+  "description": "An interactive, gamified English learning platform inspired by Duolingo, featuring structured units, dynamic listening and speaking exercises, a competitive leaderboard, vocabulary cards, a shop, and an animated owl companion.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

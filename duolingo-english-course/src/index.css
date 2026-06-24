@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-comfortaa: "Comfortaa", "Inter", sans-serif;
+
+  --color-natural-bg: #F7F5F0;
+  --color-natural-text: #4A4A4A;
+  --color-natural-sage: #7D9D7D;
+  --color-natural-darksage: #5A6E5A;
+  --color-natural-brown: #8C6D51;
+  --color-natural-darkbrown: #735A43;
+  --color-natural-cream: #FDFBF7;
+  --color-natural-border: #E5E2D9;
+  --color-natural-lightsage: #F0F5F0;
+  --color-natural-aside: #FAF9F6;
+}
+
+/* Custom extra utilities for animation or interactive styles */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.2s ease-in-out infinite;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Scrollbar styling */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
