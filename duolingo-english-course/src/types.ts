@@ -52,7 +52,7 @@ export interface UserProgress {
   ownedCostumes: string[]; // 'default', 'tuxedo', 'cowboy', 'golden'
   currentCostume: string;
   streakFreezeCount: number;
-  nativeLanguage: 'es' | 'fr' | 'de' | 'it'; // es: Spanish, fr: French, de: German, it: Italian
+  nativeLanguage: 'es' | 'fr' | 'de' | 'it' | 'tr' | 'az'; // es: Spanish, fr: French, de: German, it: Italian, tr: Turkish, az: Azerbaijani
   dailyXpGoal: number;
   todayXp: number;
 }

@@ -9,9 +9,11 @@ import { UserProgress, StoreItem } from '../types';
 import { STORE_ITEMS } from '../data/lessons';
 import MascotDuo from './MascotDuo';
 import { soundSynth } from '../utils/audio';
+import { t, NativeLanguage } from '../utils/translations';
 
 interface ShopViewProps {
   progress: UserProgress;
+  nativeLanguage: NativeLanguage;
   onPurchaseHearts: () => void;
   onPurchaseFreeze: () => void;
   onPurchaseCostume: (costumeId: string, cost: number) => void;
@@ -20,21 +22,40 @@ interface ShopViewProps {
 
 export default function ShopView({
   progress,
+  nativeLanguage,
   onPurchaseHearts,
   onPurchaseFreeze,
   onPurchaseCostume,
   onEquipCostume
 }: ShopViewProps) {
   
+  const getItemName = (id: string, defaultName: string) => {
+    if (id === 'refill_hearts') return t('shop.item.hearts.name', nativeLanguage);
+    if (id === 'streak_freeze') return t('shop.item.freeze.name', nativeLanguage);
+    if (id === 'costume_tuxedo') return t('shop.item.tuxedo.name', nativeLanguage);
+    if (id === 'costume_cowboy') return t('shop.item.cowboy.name', nativeLanguage);
+    if (id === 'costume_golden') return t('shop.item.golden.name', nativeLanguage);
+    return defaultName;
+  };
+
+  const getItemDesc = (id: string, defaultDesc: string) => {
+    if (id === 'refill_hearts') return t('shop.item.hearts.desc', nativeLanguage);
+    if (id === 'streak_freeze') return t('shop.item.freeze.desc', nativeLanguage);
+    if (id === 'costume_tuxedo') return t('shop.item.tuxedo.desc', nativeLanguage);
+    if (id === 'costume_cowboy') return t('shop.item.cowboy.desc', nativeLanguage);
+    if (id === 'costume_golden') return t('shop.item.golden.desc', nativeLanguage);
+    return defaultDesc;
+  };
+
   const handleBuy = (item: StoreItem) => {
     if (progress.gems < item.cost) {
-      alert("You need more gems to purchase this item! Finish lessons on your path to earn more.");
+      alert(t('shop.alert.need_gems', nativeLanguage));
       return;
     }
 
     if (item.type === 'hearts') {
       if (progress.hearts >= 5) {
-        alert("Your hearts are already full! Keep studying, you don't need a refill right now.");
+        alert(t('shop.alert.hearts_full', nativeLanguage));
         return;
       }
       onPurchaseHearts();
@@ -73,23 +94,39 @@ export default function ShopView({
     }
   };
 
+  const getActiveCostumeName = () => {
+    if (progress.currentCostume === 'default') {
+      return t('shop.classic_green', nativeLanguage);
+    }
+    if (progress.currentCostume === 'tuxedo') {
+      return t('shop.item.tuxedo.name', nativeLanguage);
+    }
+    if (progress.currentCostume === 'cowboy') {
+      return t('shop.item.cowboy.name', nativeLanguage);
+    }
+    if (progress.currentCostume === 'golden') {
+      return t('shop.item.golden.name', nativeLanguage);
+    }
+    return progress.currentCostume;
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8 pb-24">
       {/* Gems Header Summary */}
       <div className="bg-gradient-to-r from-natural-sage to-natural-darksage text-white rounded-3xl p-6 mb-8 flex items-center justify-between shadow-md">
         <div>
           <span className="text-xs font-black uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full">
-            Duo's Boutique
+            {t('shop.boutique', nativeLanguage)}
           </span>
-          <h2 className="text-2xl font-black mt-2 font-comfortaa">Duo's Shop</h2>
+          <h2 className="text-2xl font-black mt-2 font-comfortaa">{t('shop.title', nativeLanguage)}</h2>
           <p className="text-xs font-bold text-natural-lightsage mt-1 max-w-xs">
-            Spend your earned gems to buy status multipliers, streak shields, or custom outfits for Duo!
+            {t('shop.subtitle', nativeLanguage)}
           </p>
         </div>
         <div className="bg-white/10 px-6 py-4 rounded-2xl flex flex-col items-center">
           <span className="text-3xl">💎</span>
           <span className="text-xl font-black mt-1 font-comfortaa">{progress.gems}</span>
-          <span className="text-[10px] font-black uppercase text-sky-100 mt-0.5">My Gems</span>
+          <span className="text-[10px] font-black uppercase text-sky-100 mt-0.5">{t('shop.my_gems', nativeLanguage)}</span>
         </div>
       </div>
 
@@ -98,20 +135,20 @@ export default function ShopView({
         <MascotDuo state="idle" costume={progress.currentCostume} size="md" />
         <div className="text-center sm:text-left">
           <span className="text-[10px] font-black uppercase tracking-wider bg-natural-border text-natural-text px-2 py-0.5 rounded-full">
-            Active Mascot Outfit
+            {t('shop.active_outfit', nativeLanguage)}
           </span>
           <h3 className="text-lg font-black text-natural-text font-comfortaa mt-1.5 capitalize">
-            {progress.currentCostume === 'default' ? 'Classic Emerald' : `${progress.currentCostume} duo`}
+            {getActiveCostumeName()}
           </h3>
           <p className="text-xs text-gray-500 font-medium mt-1">
-            Buy new costumes from the items below and click 'Equip' to see Duo teach you in style!
+            {t('shop.mascot_desc', nativeLanguage)}
           </p>
           {progress.currentCostume !== 'default' && (
             <button
               onClick={() => onEquipCostume('default')}
               className="mt-3 px-3 py-1 text-xs font-bold text-natural-text border border-natural-border rounded-lg hover:bg-white bg-transparent"
             >
-              Reset to Classic Green
+              {t('shop.reset_classic', nativeLanguage)}
             </button>
           )}
         </div>
@@ -139,10 +176,10 @@ export default function ShopView({
                 {/* Info Text */}
                 <div>
                   <h4 className="font-extrabold text-natural-text text-sm md:text-md">
-                    {item.name}
+                    {getItemName(item.id, item.name)}
                   </h4>
                   <p className="text-xs text-gray-500 font-medium mt-1 max-w-sm">
-                    {item.description}
+                    {getItemDesc(item.id, item.description)}
                   </p>
                 </div>
               </div>
@@ -151,14 +188,14 @@ export default function ShopView({
               <div className="flex-shrink-0">
                 {isEquippedCostume ? (
                   <span className="flex items-center gap-1.5 px-4 py-2 bg-natural-lightsage text-natural-sage rounded-xl text-xs font-black uppercase tracking-wider border border-natural-sage/20">
-                    <Check className="w-4 h-4 text-natural-sage stroke-[3]" /> Equipped
+                    <Check className="w-4 h-4 text-natural-sage stroke-[3]" /> {t('shop.equipped', nativeLanguage)}
                   </span>
                 ) : isOwnedCostume ? (
                   <button
                     onClick={() => handleBuy(item)}
                     className="px-4 py-2 bg-natural-cream hover:bg-natural-lightsage text-natural-text font-black rounded-xl text-xs uppercase tracking-wider border border-natural-border transition-all active:scale-95"
                   >
-                    Equip
+                    {t('shop.equip', nativeLanguage)}
                   </button>
                 ) : (
                   <button

@@ -17,6 +17,7 @@ import ShopView from './components/ShopView';
 import VocabularyView from './components/VocabularyView';
 import SpeechPractice from './components/SpeechPractice';
 import MascotDuo from './components/MascotDuo';
+import AdventureView from './components/AdventureView';
 
 const LOCAL_STORAGE_KEY = 'duo_english_progress_v2';
 
@@ -107,7 +108,7 @@ export default function App() {
   };
 
   // Language selection change
-  const handleUpdateLanguage = (lang: 'es' | 'fr' | 'de' | 'it') => {
+  const handleUpdateLanguage = (lang: 'es' | 'fr' | 'de' | 'it' | 'tr' | 'az') => {
     const next = { ...progress, nativeLanguage: lang };
     saveProgress(next);
   };
@@ -209,6 +210,19 @@ export default function App() {
     saveProgress(next);
   };
 
+  const handleCompleteAdventure = (xpEarned: number, gemsEarned: number) => {
+    const nextProgress: UserProgress = {
+      ...progress,
+      xp: progress.xp + xpEarned,
+      gems: progress.gems + gemsEarned,
+      todayXp: progress.todayXp + xpEarned,
+    };
+    saveProgress(nextProgress);
+    setNoticeMessage(`Super Adventure! You earned +${xpEarned} XP and +${gemsEarned} Gems! 🔥 Duo is so proud of you!`);
+    setShowStreakNotice(true);
+    setActiveTab('learn');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center">
@@ -246,6 +260,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         streak={progress.streak}
         gems={progress.gems}
+        nativeLanguage={progress.nativeLanguage}
       />
 
       {/* Main Content Area */}
@@ -299,7 +314,7 @@ export default function App() {
           )}
 
           {activeTab === 'practice' && (
-            <SpeechPractice onAwardGems={handleAwardGems} />
+            <SpeechPractice onAwardGems={handleAwardGems} nativeLanguage={progress.nativeLanguage} />
           )}
 
           {activeTab === 'leaderboard' && (
@@ -309,10 +324,19 @@ export default function App() {
           {activeTab === 'shop' && (
             <ShopView
               progress={progress}
+              nativeLanguage={progress.nativeLanguage}
               onPurchaseHearts={handlePurchaseHearts}
               onPurchaseFreeze={handlePurchaseFreeze}
               onPurchaseCostume={handlePurchaseCostume}
               onEquipCostume={handleEquipCostume}
+            />
+          )}
+
+          {activeTab === 'adventure' && (
+            <AdventureView
+              progress={progress}
+              onCompleteAdventure={handleCompleteAdventure}
+              onStartCustomLesson={(lesson: any) => setActiveLesson(lesson)}
             />
           )}
 

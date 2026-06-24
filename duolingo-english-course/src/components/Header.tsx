@@ -5,27 +5,30 @@
 
 import { Heart, Flame, Shield, Globe } from 'lucide-react';
 import { UserProgress } from '../types';
+import { t, NativeLanguage } from '../utils/translations';
 
 interface HeaderProps {
   progress: UserProgress;
-  updateLanguage: (lang: 'es' | 'fr' | 'de' | 'it') => void;
+  updateLanguage: (lang: NativeLanguage) => void;
   openShop: () => void;
 }
 
 export default function Header({ progress, updateLanguage, openShop }: HeaderProps) {
-  // Flag indicators
+  // Flag indicators with Native labels as requested
   const languageNames = {
-    es: { flag: '🇪🇸', label: 'Spanish' },
-    fr: { flag: '🇫🇷', label: 'French' },
-    de: { flag: '🇩🇪', label: 'German' },
-    it: { flag: '🇮🇹', label: 'Italian' }
+    es: { flag: '🇪🇸', label: 'Español' },
+    fr: { flag: '🇫🇷', label: 'Français' },
+    de: { flag: '🇩🇪', label: 'Deutsch' },
+    it: { flag: '🇮🇹', label: 'Italiano' },
+    tr: { flag: '🇹🇷', label: 'Türkçe' },
+    az: { flag: '🇦🇿', label: 'Azərbaycanca' }
   };
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between w-full h-16 px-4 bg-white/95 backdrop-blur border-b border-natural-border shadow-sm md:px-8">
       {/* Target & Source Language Switcher */}
       <div className="flex items-center gap-2">
-        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider hidden sm:inline">Teaching English for:</span>
+        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider hidden sm:inline">{t('header.teaching', progress.nativeLanguage)}</span>
         <div className="relative group">
           <button className="flex items-center gap-1 px-3 py-1.5 bg-natural-cream hover:bg-natural-lightsage text-natural-text font-bold rounded-xl text-sm border border-natural-border transition-all">
             <span className="text-lg">{languageNames[progress.nativeLanguage].flag}</span>
@@ -35,7 +38,7 @@ export default function Header({ progress, updateLanguage, openShop }: HeaderPro
           
           {/* Dropdown Menu */}
           <div className="absolute left-0 mt-1 hidden group-hover:flex flex-col bg-white border border-natural-border rounded-2xl shadow-xl w-40 overflow-hidden py-1 animate-fadeIn">
-            {(Object.keys(languageNames) as Array<'es' | 'fr' | 'de' | 'it'>).map((lang) => (
+            {(Object.keys(languageNames) as Array<NativeLanguage>).map((lang) => (
               <button
                 key={lang}
                 onClick={() => updateLanguage(lang)}
@@ -56,7 +59,7 @@ export default function Header({ progress, updateLanguage, openShop }: HeaderPro
       {/* Interactive Stats Panel */}
       <div className="flex items-center gap-4 sm:gap-6">
         {/* Streak Counter */}
-        <div className="flex items-center gap-1.5" title="Daily Streak">
+        <div className="flex items-center gap-1.5" title={t('header.streak', progress.nativeLanguage)}>
           <Flame className="w-6 h-6 text-[#FF9600] fill-[#FF9600] animate-pulse" />
           <span className="text-sm font-extrabold text-[#FF9600] font-comfortaa">
             {progress.streak}
@@ -67,7 +70,7 @@ export default function Header({ progress, updateLanguage, openShop }: HeaderPro
         <button 
           onClick={openShop}
           className="flex items-center gap-1.5 hover:scale-105 transition-all" 
-          title="My Gems (Click to spend in Shop)"
+          title={t('header.gems', progress.nativeLanguage)}
         >
           <span className="text-lg">💎</span>
           <span className="text-sm font-extrabold text-[#1CB0F6] font-comfortaa">
@@ -79,7 +82,7 @@ export default function Header({ progress, updateLanguage, openShop }: HeaderPro
         <button 
           onClick={openShop}
           className="flex items-center gap-1.5 hover:scale-105 transition-all" 
-          title="Hearts (Lives - Click to Refill)"
+          title={t('header.hearts', progress.nativeLanguage)}
         >
           <Heart 
             className={`w-6 h-6 transition-all ${
@@ -91,7 +94,7 @@ export default function Header({ progress, updateLanguage, openShop }: HeaderPro
           <span className={`text-sm font-extrabold font-comfortaa ${
             progress.hearts <= 1 ? 'text-[#FF4B4B] animate-bounce' : 'text-[#FF4B4B]'
           }`}>
-            {progress.hearts === 0 ? 'Empty' : progress.hearts}
+            {progress.hearts === 0 ? t('header.empty', progress.nativeLanguage) : progress.hearts}
           </span>
         </button>
 
@@ -105,7 +108,7 @@ export default function Header({ progress, updateLanguage, openShop }: HeaderPro
 
         {/* Level Indicator & Cumulative XP */}
         <div className="flex flex-col items-end text-right">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Score</span>
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('header.score', progress.nativeLanguage)}</span>
           <span className="text-xs font-black text-natural-sage bg-natural-lightsage px-2 py-0.5 rounded-full">
             {progress.xp} XP
           </span>

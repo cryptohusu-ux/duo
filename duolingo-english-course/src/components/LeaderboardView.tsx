@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { Trophy, Shield, Flame, Medal, Sparkles, TrendingUp } from 'lucide-react';
 import { LeaderboardUser, UserProgress } from '../types';
 import { INITIAL_LEADERBOARD } from '../data/lessons';
+import { t, NativeLanguage } from '../utils/translations';
 
 interface LeaderboardViewProps {
   progress: UserProgress;
@@ -17,6 +18,15 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
   const [leagues] = useState(['Bronze', 'Silver', 'Gold', 'Obsidian', 'Diamond']);
   const [currentLeagueIdx, setCurrentLeagueIdx] = useState(2); // Start in Gold League!
   const [boardUsers, setBoardUsers] = useState<LeaderboardUser[]>([]);
+
+  // Localized league names helper
+  const localizedLeagues: Record<string, Record<NativeLanguage, string>> = {
+    Bronze: { es: 'Bronce', fr: 'Bronze', de: 'Bronze', it: 'Bronzo', tr: 'Bronz', az: 'Bronz' },
+    Silver: { es: 'Plata', fr: 'Argent', de: 'Silber', it: 'Argento', tr: 'Gümüş', az: 'Gümüş' },
+    Gold: { es: 'Oro', fr: 'Or', de: 'Gold', it: 'Oro', tr: 'Altın', az: 'Qızıl' },
+    Obsidian: { es: 'Obsidiana', fr: 'Obsidienne', de: 'Obsidian', it: 'Ossidiana', tr: 'Obsidyen', az: 'Obsidian' },
+    Diamond: { es: 'Diamante', fr: 'Diamant', de: 'Diamant', it: 'Diamante', tr: 'Elmas', az: 'Almaz' }
+  };
 
   // Prepare and update simulated competitors dynamically to create tension!
   useEffect(() => {
@@ -38,7 +48,7 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
 
     const userProfile: LeaderboardUser = {
       id: 'current_user',
-      name: 'You (English Scholar)',
+      name: t('leader.you.desc', progress.nativeLanguage),
       xp: progress.xp,
       avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=duoplayer',
       isUser: true,
@@ -48,9 +58,10 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
     // Combine and sort by score descending
     const combined = [...mockCompetitors, userProfile].sort((a, b) => b.xp - a.xp);
     setBoardUsers(combined);
-  }, [progress.xp, progress.streak, currentLeagueIdx]);
+  }, [progress.xp, progress.streak, currentLeagueIdx, progress.nativeLanguage]);
 
   const league = leagues[currentLeagueIdx];
+  const localizedLeagueName = localizedLeagues[league]?.[progress.nativeLanguage] || league;
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8 pb-24">
@@ -66,7 +77,7 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
                 : 'text-gray-400 hover:text-natural-text'
             }`}
           >
-            {l}
+            {localizedLeagues[l]?.[progress.nativeLanguage] || l}
           </button>
         ))}
       </div>
@@ -79,9 +90,11 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
             <Sparkles className="w-12 h-12" />
           </div>
           <Medal className="w-12 h-12 mx-auto fill-yellow-100 text-yellow-500 bg-white p-2 rounded-full shadow-md" />
-          <h2 className="text-2xl font-black mt-3 font-comfortaa">{league} League</h2>
+          <h2 className="text-2xl font-black mt-3 font-comfortaa">
+            {localizedLeagueName} {t('leader.league', progress.nativeLanguage)}
+          </h2>
           <p className="text-xs font-bold text-yellow-50/90 mt-1 uppercase tracking-wider">
-            Ends in 2 days • Top 3 promote to next tier!
+            {t('leader.ends', progress.nativeLanguage)}
           </p>
         </div>
 
@@ -133,10 +146,10 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
                       {user.name}
                     </span>
                     <div className="flex items-center gap-1.5 text-[10px] font-extrabold text-gray-400 mt-0.5">
-                      <span>🔥 {user.streak} day streak</span>
+                      <span>🔥 {user.streak} {user.streak === 1 ? t('sidebar.day', progress.nativeLanguage) : t('sidebar.days', progress.nativeLanguage)}</span>
                       {isTop3 && (
                         <span className="text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded font-black flex items-center gap-0.5 uppercase tracking-wide">
-                          Promotion Zone
+                          {t('leader.promotion', progress.nativeLanguage)}
                         </span>
                       )}
                     </div>
@@ -157,7 +170,7 @@ export default function LeaderboardView({ progress }: LeaderboardViewProps) {
       {/* Motivational Bottom Message */}
       <div className="mt-6 text-center text-xs text-gray-400 font-bold flex items-center gap-2 justify-center bg-natural-cream border border-natural-border py-3 rounded-2xl">
         <TrendingUp className="w-4 h-4 text-natural-sage" />
-        <span>Earn more XP in the Learn path to pass your closest competitor!</span>
+        <span>{t('leader.motivation', progress.nativeLanguage)}</span>
       </div>
     </div>
   );

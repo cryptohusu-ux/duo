@@ -10,30 +10,170 @@ import { speakEnglish, soundSynth } from '../utils/audio';
 
 interface SpeechPracticeProps {
   onAwardGems: (gems: number) => void;
+  nativeLanguage: 'es' | 'fr' | 'de' | 'it' | 'tr' | 'az';
 }
 
 interface PracticePhrase {
   sentence: string;
-  translation: string;
+  translations: {
+    es: string;
+    fr: string;
+    de: string;
+    it: string;
+    tr: string;
+    az: string;
+  };
   category: 'Basic' | 'Travel' | 'Business' | 'Casual';
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
 }
 
 const PRACTICE_PHRASES: PracticePhrase[] = [
-  { sentence: "Hello, nice to meet you", translation: "Hola, mucho gusto / encantado de conocerte", category: "Basic", difficulty: "Beginner" },
-  { sentence: "Have a wonderful day", translation: "Que tengas un día maravilloso", category: "Basic", difficulty: "Beginner" },
-  { sentence: "Where is the hotel lobby", translation: "¿Dónde está el lobby del hotel?", category: "Travel", difficulty: "Beginner" },
-  { sentence: "Excuse me, where is the passport control", translation: "Disculpe, ¿dónde está el control de pasaportes?", category: "Travel", difficulty: "Intermediate" },
-  { sentence: "A table for two and the menu, please", translation: "Una mesa para dos y el menú, por favor", category: "Travel", difficulty: "Intermediate" },
-  { sentence: "Let us schedule a meeting tomorrow", translation: "Programemos una reunión mañana", category: "Business", difficulty: "Intermediate" },
-  { sentence: "This project is highly important to our team", translation: "Este proyecto es sumamente importante para nuestro equipo", category: "Business", difficulty: "Advanced" },
-  { sentence: "I agree with your marketing strategy", translation: "Estoy de acuerdo con tu estrategia de marketing", category: "Business", difficulty: "Advanced" },
-  { sentence: "I would love to learn English with you", translation: "Me encantaría aprender inglés contigo", category: "Casual", difficulty: "Intermediate" },
-  { sentence: "What are your future plans for the weekend", translation: "¿Cuáles son tus planes futuros para el fin de semana?", category: "Casual", difficulty: "Intermediate" },
-  { sentence: "Believe in yourself and achieve your goals", translation: "Cree en ti mismo y alcanza tus metas", category: "Casual", difficulty: "Advanced" }
+  {
+    sentence: "Hello, nice to meet you",
+    translations: {
+      es: "Hola, mucho gusto / encantado de conocerte",
+      fr: "Bonjour, ravi de vous rencontrer",
+      de: "Hallo, schön Sie kennenzulernen",
+      it: "Ciao, piacere di conoscerti",
+      tr: "Merhaba, tanıştığımıza memnun oldum",
+      az: "Salam, tanış olmağımıza şadam"
+    },
+    category: "Basic",
+    difficulty: "Beginner"
+  },
+  {
+    sentence: "Have a wonderful day",
+    translations: {
+      es: "Que tengas un día maravilloso",
+      fr: "Passez une merveilleuse journée",
+      de: "Hab einen wundervollen Tag",
+      it: "Buona giornata meravigliosa",
+      tr: "Harika bir gün geçirmeniz dileğiyle",
+      az: "Gözəl bir gün keçirəsiniz"
+    },
+    category: "Basic",
+    difficulty: "Beginner"
+  },
+  {
+    sentence: "Where is the hotel lobby",
+    translations: {
+      es: "¿Dónde está el lobby del hotel?",
+      fr: "Où est le hall de l'hôtel?",
+      de: "Wo ist die Hotellobby?",
+      it: "Dov'è la hall dell'hotel?",
+      tr: "Otel lobisi nerede?",
+      az: "Otel lobbisi haradadır?"
+    },
+    category: "Travel",
+    difficulty: "Beginner"
+  },
+  {
+    sentence: "Excuse me, where is the passport control",
+    translations: {
+      es: "Disculpe, ¿dónde está el control de pasaportes?",
+      fr: "Excusez-moi, où est le contrôle des passeports?",
+      de: "Entschuldigung, wo ist die Passkontrolle?",
+      it: "Scusa, dov'è il controllo passaporti?",
+      tr: "Affedersiniz, pasaport kontrolü nerede?",
+      az: "Bağışlayın, pasport nəzarəti haradadır?"
+    },
+    category: "Travel",
+    difficulty: "Intermediate"
+  },
+  {
+    sentence: "A table for two and the menu, please",
+    translations: {
+      es: "Una mesa para dos y el menú, por favor",
+      fr: "Une table pour deux et la carte, s'il vous plaît",
+      de: "Ein Tisch für zwei und die Speisekarte, bitte",
+      it: "Un tavolo per due e il menu, per favore",
+      tr: "İki kişilik bir masa ve menü lütfen",
+      az: "İki nəfərlik masa və menyu, zəhmət olmasa"
+    },
+    category: "Travel",
+    difficulty: "Intermediate"
+  },
+  {
+    sentence: "Let us schedule a meeting tomorrow",
+    translations: {
+      es: "Programemos una reunión mañana",
+      fr: "Planifions une réunion demain",
+      de: "Lass uns morgen eine Besprechung ansetzen",
+      it: "Pianifichiamo un incontro domani",
+      tr: "Yarın için bir toplantı planlayalım",
+      az: "Sabah bir görüş planlaşdıraq"
+    },
+    category: "Business",
+    difficulty: "Intermediate"
+  },
+  {
+    sentence: "This project is highly important to our team",
+    translations: {
+      es: "Este proyecto es sumamente importante para nuestro equipo",
+      fr: "Ce projet est extrêmement important pour notre équipe",
+      de: "Dieses Projekt ist für unser Team von großer Bedeutung",
+      it: "Questo progetto è estremamente importante per il nostro team",
+      tr: "Bu proje ekibimiz için son derece önemlidir",
+      az: "Bu layihə komandamız üçün olduqca vacibdir"
+    },
+    category: "Business",
+    difficulty: "Advanced"
+  },
+  {
+    sentence: "I agree with your marketing strategy",
+    translations: {
+      es: "Estoy de acuerdo con tu estrategia de marketing",
+      fr: "Je suis d'accord avec votre stratégie marketing",
+      de: "Ich stimme Ihrer Marketingstrategie zu",
+      it: "Sono d'accordo con la tua strategia di marketing",
+      tr: "Pazarlama stratejinize katılıyorum",
+      az: "Sizin marketinq strategiyanızla razıyam"
+    },
+    category: "Business",
+    difficulty: "Advanced"
+  },
+  {
+    sentence: "I would love to learn English with you",
+    translations: {
+      es: "Me encantaría aprender inglés contigo",
+      fr: "J'adorerais apprendre l'anglais avec vous",
+      de: "Ich würde sehr gerne mit dir Englisch lernen",
+      it: "Mi piacerebbe molto imparare l'inglese con te",
+      tr: "Sizinle İngilizce öğrenmeyi çok isterim",
+      az: "Sizinlə İngilis dili öyrənməyi çox istərdim"
+    },
+    category: "Casual",
+    difficulty: "Intermediate"
+  },
+  {
+    sentence: "What are your future plans for the weekend",
+    translations: {
+      es: "¿Cuáles son tus planes futuros para el fin de semana?",
+      fr: "Quels sont vos projets futurs pour le week-end?",
+      de: "Was sind deine Zukunftspläne für das Wochenende?",
+      it: "Quali sono i tuoi piani futuri per il fine settimana?",
+      tr: "Hafta sonu için gelecek planlarınız nelerdir?",
+      az: "Həftə sonu üçün gələcək planlarınız nədir?"
+    },
+    category: "Casual",
+    difficulty: "Intermediate"
+  },
+  {
+    sentence: "Believe in yourself and achieve your goals",
+    translations: {
+      es: "Cree en ti mismo y alcanza tus metas",
+      fr: "Croyez en vous-même et atteignez vos objectifs",
+      de: "Glaube an dich selbst und erreiche deine Ziele",
+      it: "Credi in te stesso e raggiungi i tuoi obiettivi",
+      tr: "Kendine inan ve hedeflerine ulaş",
+      az: "Özünə inan və hədəflərinə nail ol"
+    },
+    category: "Casual",
+    difficulty: "Advanced"
+  }
 ];
 
-export default function SpeechPractice({ onAwardGems }: SpeechPracticeProps) {
+export default function SpeechPractice({ onAwardGems, nativeLanguage }: SpeechPracticeProps) {
   const [activeCategory, setActiveCategory] = useState<'All' | 'Basic' | 'Travel' | 'Business' | 'Casual'>('All');
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
@@ -191,7 +331,7 @@ export default function SpeechPractice({ onAwardGems }: SpeechPracticeProps) {
             "{phrase.sentence}"
           </h1>
           <p className="text-sm text-gray-500 font-medium italic mt-2">
-            Translation: "{phrase.translation}"
+            Translation: "{phrase.translations[nativeLanguage] || phrase.translations['es']}"
           </p>
 
           {/* Play Listen Speaker */}
