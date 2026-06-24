@@ -203,8 +203,8 @@ export default function PathView({ units, progress, onStartLesson }: PathViewPro
           {/* BEGIN AADS AD UNIT 2445437 */}
           <div id="frame" style={{ width: '100%', margin: 'auto', position: 'relative', zIndex: 99998 }}>
             <iframe 
-              data-aa="2445437" 
-              src="//acceptable.a-ads.com/2445437/?size=Adaptive"
+              data-aa="2445561" 
+              src="//acceptable.a-ads.com/2445561/?size=Adaptive"
               style={{ border: 0, padding: 0, width: '100%', height: '120px', overflow: 'hidden', display: 'block', margin: 'auto' }}
             />
           </div>
